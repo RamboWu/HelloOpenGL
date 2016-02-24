@@ -15,6 +15,8 @@ void Util::printMaxtrix44f(const M3DMatrix44f matrix)
 
 bool Util::LoadTGATexture(const char *szFileName, GLenum minFilter, GLenum magFilter, GLenum wrapMode)
 {
+	fprintf(stderr, "LoadTGATexture>> %s\n", szFileName);
+
 	GLbyte *pBits;
 	int nWidth, nHeight, nComponents;
 	GLenum eFormat;

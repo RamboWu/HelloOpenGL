@@ -45,6 +45,8 @@ GLuint				pixelDataSize;
 GLBatch             screenQuad;
 M3DMatrix44f        orthoMatrix;
 
+GLuint	textureID;
+
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
 // context. 
@@ -92,12 +94,18 @@ void SetupRC()
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
 	glBufferData(GL_PIXEL_PACK_BUFFER, pixelDataSize, NULL, GL_DYNAMIC_COPY);
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	LoadTGATexture("stone.tga", GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE);
 }
 
 void ShutdownRC(void)
 {
 	// delete PBO
 	glDeleteBuffers(1, pixBuffObjs);
+
+	glDeleteTextures(1, &textureID);
 }
 
 

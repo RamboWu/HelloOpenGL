@@ -1,4 +1,4 @@
-//#pragma comment(lib, "glew32.lib")
+ï»¿//#pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "glew32s.lib")
 //#pragma comment(lib, "freeglut.lib")
 
@@ -42,6 +42,8 @@ int window_width, window_height;
 
 GLuint				pixBuffObjs[1];
 GLuint				pixelDataSize;
+GLBatch             screenQuad;
+M3DMatrix44f        orthoMatrix;
 
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
@@ -79,7 +81,10 @@ void SetupRC()
 		spheres[i].SetOrigin(x, 0.0f, z);
 	}
 
-	//×¼±¸ÏñËØ»º³åÇø
+	//åˆ›å»ºä¸€ä¸ªæ­£æŠ•å½±
+	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width/2, window_height/2, screenQuad);
+
+	//å‡†å¤‡åƒç´ ç¼“å†²åŒº
 	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
 
 	// Alloc space for copying pixels so we dont call malloc on every draw
@@ -112,7 +117,7 @@ void ChangeSize(int nWidth, int nHeight)
 	transformPipeline.SetMatrixStacks(modelViewMatrix, projectionMatrix);
 
 
-	//×¼±¸ÏñËØ»º³åÇø
+	//å‡†å¤‡åƒç´ ç¼“å†²åŒº
 	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
 
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);

@@ -1,4 +1,4 @@
-// GLTools.h
+﻿// GLTools.h
 // OpenGL SuperBible
 /* Copyright 1998 - 2003 Richard S. Wright Jr.
 All rights reserved.
@@ -185,6 +185,7 @@ GLuint gltLoadShaderPairSrcWithAttributes(const char *szVertexProg, const char *
 
 bool gltCheckErrors(GLuint progName = 0);
 void gltGenerateOrtho2DMat(GLuint width, GLuint height, M3DMatrix44f &orthoMatrix, GLBatch &screenQuad);
-
+//创建屏幕正投影，然后搞一个位于x,y，坐标 宽 tex_width,高 text_height的 texQuad
+void gltGenerateOrtho2DMat(GLuint width, GLuint height, M3DMatrix44f &orthoMatrix, GLuint x, GLuint y, GLuint tex_width, GLuint tex_height, GLBatch &texQuad);
 
 #endif

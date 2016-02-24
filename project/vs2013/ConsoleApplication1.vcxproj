@@ -87,6 +87,7 @@
     <ClCompile Include="..\..\common\GLTools\src\math3d.cpp" />
     <ClCompile Include="..\..\src\Engine\Core\Camera.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\GLTools\include\GLBatch.h" />

@@ -1,23 +1,25 @@
 #ifndef __UTIL_H_
 #define __UTIL_H_
 
+#include <stdio.h>
 #include <math3d.h>
+#include <GLTools.h>
+
+#ifdef __APPLE__
+#include <glut/glut.h>
+#else
+#define FREEGLUT_STATIC
+#include <GL/glut.h>
+#endif
 
 class Util
 {
 public:
 
-	static void printMaxtrix44f(const M3DMatrix44f matrix)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				fprintf(stderr, "%.2f ", matrix[i * 4 + j]);
+	static void printMaxtrix44f(const M3DMatrix44f matrix);
 
-			}
-			fprintf(stderr, "\n");
-		}
-	}
+	// Load a TGA as a 2D Texture. Completely initialize the state
+	static bool LoadTGATexture(const char *szFileName, GLenum minFilter, GLenum magFilter, GLenum wrapMode);
+
 };
 #endif

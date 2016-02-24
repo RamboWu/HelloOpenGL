@@ -13,6 +13,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include "Util/Util.h"
 
 #ifdef __APPLE__
 #include <glut/glut.h>
@@ -44,6 +45,8 @@ GLuint				pixBuffObjs[1];
 GLuint				pixelDataSize;
 GLBatch             screenQuad;
 M3DMatrix44f        orthoMatrix;
+
+GLuint	textureID;
 
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
@@ -92,12 +95,18 @@ void SetupRC()
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
 	glBufferData(GL_PIXEL_PACK_BUFFER, pixelDataSize, NULL, GL_DYNAMIC_COPY);
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	Util::LoadTGATexture("stone.tga", GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE);
 }
 
 void ShutdownRC(void)
 {
 	// delete PBO
 	glDeleteBuffers(1, pixBuffObjs);
+
+	glDeleteTextures(1, &textureID);
 }
 
 
@@ -133,6 +142,8 @@ void ChangeSize(int nWidth, int nHeight)
 void RenderScene(void)
 {
 	// Color values
+	static GLfloat vLightPos[] = { 1.0f, 1.0f, 0.0f };
+	static GLfloat vWhite[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	static GLfloat vFloorColor[] = { 0.0f, 1.0f, 0.0f, 1.0f };
 	static GLfloat vTorusColor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	static GLfloat vSphereColor[] = { 0.0f, 0.0f, 1.0f, 1.0f };
@@ -210,10 +221,16 @@ void RenderScene(void)
 	modelViewMatrix.LoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
+	//shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	shaderManager.UseStockShader(GLT_SHADER_TEXTURE_POINT_LIGHT_DIFF,
+		transformPipeline.GetModelViewMatrix(),
+		transformPipeline.GetProjectionMatrix(),
+		vLightPos, vWhite, 0);
 	screenQuad.Draw();
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	modelViewMatrix.PopMatrix();
 	projectionMatrix.PopMatrix();
 

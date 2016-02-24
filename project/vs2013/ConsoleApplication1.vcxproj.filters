@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{dd2d740f-88f5-4dcb-bf5a-fb05495dcf58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{348508cf-dc98-49c6-bf13-512843bfc223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{93fb06e1-bef4-4f5c-9fce-53e5d9907b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\GLTools">
+      <UniqueIdentifier>{32456b4c-a661-439a-90b6-28d2771cadcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\GLTools\include">
+      <UniqueIdentifier>{98f69e35-c103-4df1-909c-a0985f7e17c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\GLTools\src">
+      <UniqueIdentifier>{b4bcf136-7fd9-4d19-ba6c-7670ac901440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{55ef85e0-b4ae-4350-80b8-173405ccc55e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Engine\Core\Camera.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GLTools\src\GLBatch.cpp">
+      <Filter>Common\GLTools\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GLTools\src\GLShaderManager.cpp">
+      <Filter>Common\GLTools\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GLTools\src\GLTools.cpp">
+      <Filter>Common\GLTools\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GLTools\src\GLTriangleBatch.cpp">
+      <Filter>Common\GLTools\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\GLTools\src\math3d.cpp">
+      <Filter>Common\GLTools\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Engine\Core\Camera.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Engine\Core\GameViewPort.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Engine\Core\World.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLBatch.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLBatchBase.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLFrame.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLFrustum.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLGeometryTransform.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLMatrixStack.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLShaderManager.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLTools.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\GLTriangleBatch.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\math3d.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GLTools\include\StopWatch.h">
+      <Filter>Common\GLTools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Util.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

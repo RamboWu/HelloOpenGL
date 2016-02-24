@@ -118,7 +118,7 @@ void ChangeSize(int nWidth, int nHeight)
 
 
 	//创建一个正投影
-	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width / 2, window_height / 2, screenQuad);
+	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width / 3, window_height / 3, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
@@ -210,7 +210,7 @@ void RenderScene(void)
 	modelViewMatrix.LoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	shaderManager.UseStockShader(GLT_SHADER_IDENTITY, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
+	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
 	screenQuad.Draw();
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

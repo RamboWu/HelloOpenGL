@@ -117,6 +117,9 @@ void ChangeSize(int nWidth, int nHeight)
 	transformPipeline.SetMatrixStacks(modelViewMatrix, projectionMatrix);
 
 
+	//创建一个正投影
+	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width / 2, window_height / 2, screenQuad);
+
 	//准备像素缓冲区
 	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
 
@@ -172,16 +175,14 @@ void RenderScene(void)
 
 	// Apply a rotation and draw the torus
 	modelViewMatrix.Rotate(yRot, 0.0f, 1.0f, 0.0f);
-	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(),
-		vTorusColor);
+	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
 	torusBatch.Draw();
 	modelViewMatrix.PopMatrix(); // "Erase" the Rotation from before
 
 	// Apply another rotation, followed by a translation, then draw the sphere
 	modelViewMatrix.Rotate(yRot * -2.0f, 0.0f, 1.0f, 0.0f);
 	modelViewMatrix.Translate(0.8f, 0.0f, 0.0f);
-	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(),
-		vSphereColor);
+	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vSphereColor);
 	sphereBatch.Draw();
 
 	// Restore the previous modleview matrix (the identity matrix)
@@ -200,6 +201,21 @@ void RenderScene(void)
 	glActiveTexture(GL_TEXTURE0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+
+
+	projectionMatrix.PushMatrix();
+	projectionMatrix.LoadIdentity();
+	projectionMatrix.LoadMatrix(orthoMatrix);
+	modelViewMatrix.PushMatrix();
+	modelViewMatrix.LoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	shaderManager.UseStockShader(GLT_SHADER_IDENTITY, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
+	screenQuad.Draw();
+	glEnable(GL_DEPTH_TEST);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	modelViewMatrix.PopMatrix();
+	projectionMatrix.PopMatrix();
 
 	// Do the buffer Swap
 	glutSwapBuffers();

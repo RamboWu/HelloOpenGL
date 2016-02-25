@@ -68,26 +68,24 @@ void GreyScale::render()
 	// Next bind the PBO as the unpack buffer, then push the pixels straight into the texture
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pixBuffObjs[0]);
 
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	
 
 
 
 	glDisable(GL_DEPTH_TEST);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUseProgram(myTexturedIdentityShader);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
 	GLint iMvpUniform = glGetUniformLocation(myTexturedIdentityShader, "mvpMatrix");
 	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, orthoMatrix);
 	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
-	glUniform1i(iTextureUniform, 0);
+	glUniform1i(iTextureUniform, 1);
 	//shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	screenQuad.Draw();
+
 	glEnable(GL_DEPTH_TEST);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 }

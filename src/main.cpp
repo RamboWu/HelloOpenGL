@@ -106,6 +106,7 @@ void SetupRC()
 	{
 		fprintf(stderr, "LoadTGATexture stone.tga failed");
 	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ShutdownRC(void)
@@ -216,7 +217,7 @@ void RenderScene(void)
 	// Next bind the PBO as the unpack buffer, then push the pixels straight into the texture
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pixBuffObjs[0]);
 
-	glActiveTexture(GL_TEXTURE0+1);
+	glActiveTexture(GL_TEXTURE0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 

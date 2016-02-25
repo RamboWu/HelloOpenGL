@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\common\GLTools\src\GLTriangleBatch.cpp" />
     <ClCompile Include="..\..\common\GLTools\src\math3d.cpp" />
     <ClCompile Include="..\..\src\Engine\Core\Camera.cpp" />
+    <ClCompile Include="..\..\src\Engine\PostProcess\GreyScale.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Util\Util.cpp" />
   </ItemGroup>
@@ -104,6 +105,8 @@
     <ClInclude Include="..\..\src\Engine\Core\Camera.h" />
     <ClInclude Include="..\..\src\Engine\Core\GameViewPort.h" />
     <ClInclude Include="..\..\src\Engine\Core\World.h" />
+    <ClInclude Include="..\..\src\Engine\PostProcess\GreyScale.h" />
+    <ClInclude Include="..\..\src\Engine\PostProcess\PostProcessRender.h" />
     <ClInclude Include="..\..\src\Util\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

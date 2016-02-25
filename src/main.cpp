@@ -46,6 +46,7 @@ GLuint				pixelDataSize;
 GLBatch             screenQuad;
 M3DMatrix44f        orthoMatrix;
 
+GLint	myTexturedIdentityShader;
 GLuint	textureID;
 
 //////////////////////////////////////////////////////////////////
@@ -107,6 +108,10 @@ void SetupRC()
 		fprintf(stderr, "LoadTGATexture stone.tga failed");
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("TexturedIdentity.vs", "TexturedIdentity.fs", 2,
+		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 }
 
 void ShutdownRC(void)
@@ -115,6 +120,8 @@ void ShutdownRC(void)
 	glDeleteBuffers(1, pixBuffObjs);
 
 	glDeleteTextures(1, &textureID);
+
+	glDeleteProgram(myTexturedIdentityShader);
 }
 
 
@@ -231,9 +238,14 @@ void RenderScene(void)
 	modelViewMatrix.LoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glUseProgram(myTexturedIdentityShader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
+	GLint iMvpUniform = glGetUniformLocation(myTexturedIdentityShader, "mvpMatrix");
+	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, transformPipeline.GetModelViewProjectionMatrix());
+	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
+	glUniform1i(iTextureUniform, 0);
+	//shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	screenQuad.Draw();
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

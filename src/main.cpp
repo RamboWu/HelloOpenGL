@@ -169,7 +169,7 @@ void RenderScene(void)
 
 	// Clear the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	glEnable(GL_DEPTH_TEST);
 
 	// Save the current modelview matrix (the identity matrix)
 	modelViewMatrix.PushMatrix();

@@ -98,7 +98,15 @@ void SetupRC()
 
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	Util::LoadTGATexture("stone.tga", GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE);
+	if (Util::LoadTGATexture("stone.tga", GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE))
+	{
+		fprintf(stderr, "LoadTGATexture stone.tga success");
+	}
+	else
+	{
+		fprintf(stderr, "LoadTGATexture stone.tga failed");
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ShutdownRC(void)
@@ -221,12 +229,9 @@ void RenderScene(void)
 	modelViewMatrix.LoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	shaderManager.UseStockShader(GLT_SHADER_TEXTURE_POINT_LIGHT_DIFF,
-		transformPipeline.GetModelViewMatrix(),
-		transformPipeline.GetProjectionMatrix(),
-		vLightPos, vWhite, 0);
+	shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	screenQuad.Draw();
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

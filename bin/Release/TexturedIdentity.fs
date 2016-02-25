@@ -12,6 +12,11 @@ smooth in vec2 vVaryingTexCoords;
 
 
 void main(void)
-   { 
-   vFragColor = texture(colorMap, vVaryingTexCoords.st);
-   }
+{ 
+   	vec4 vColor; 
+   	vColor = texture(colorMap, vVaryingTexCoords.st);
+    
+   	float grey = dot(vColor.rgb, vec3(0.3, 0.59, 0.11));
+	vFragColor = vec4(grey, grey, grey, 1.0f);
+
+}

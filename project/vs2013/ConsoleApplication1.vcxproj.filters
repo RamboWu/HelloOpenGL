@@ -34,6 +34,9 @@
     <Filter Include="Util">
       <UniqueIdentifier>{55ef85e0-b4ae-4350-80b8-173405ccc55e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\PostProcess">
+      <UniqueIdentifier>{93974e06-680b-4281-b2c8-87fc8c1f67bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Engine\Core\Camera.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Util\Util.cpp">
       <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Engine\PostProcess\GreyScale.cpp">
+      <Filter>Engine\PostProcess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +112,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Util\Util.h">
       <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Engine\PostProcess\GreyScale.h">
+      <Filter>Engine\PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Engine\PostProcess\PostProcessRender.h">
+      <Filter>Engine\PostProcess</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

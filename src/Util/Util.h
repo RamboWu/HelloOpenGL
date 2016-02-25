@@ -5,6 +5,7 @@
 #include <math3d.h>
 #include <GLTools.h>
 
+
 #ifdef __APPLE__
 #include <glut/glut.h>
 #else
@@ -21,5 +22,6 @@ public:
 	// Load a TGA as a 2D Texture. Completely initialize the state
 	static bool LoadTGATexture(const char *szFileName, GLenum minFilter, GLenum magFilter, GLenum wrapMode);
 
+	static LPCSTR SclGetAppCurDir();
 };
 #endif

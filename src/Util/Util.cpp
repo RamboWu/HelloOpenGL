@@ -1,4 +1,6 @@
 #include "Util.h"
+#include <windows.h>
+
 
 void Util::printMaxtrix44f(const M3DMatrix44f matrix)
 {
@@ -21,6 +23,8 @@ bool Util::LoadTGATexture(const char *szFileName, GLenum minFilter, GLenum magFi
 	int nWidth, nHeight, nComponents;
 	GLenum eFormat;
 
+	fprintf(stderr, "%s \n", SclGetAppCurDir());
+	
 	// Read the texture bits
 	pBits = gltReadTGABits(szFileName, &nWidth, &nHeight, &nComponents, &eFormat);
 	if (pBits == NULL)
@@ -45,4 +49,24 @@ bool Util::LoadTGATexture(const char *szFileName, GLenum minFilter, GLenum magFi
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 	return true;
+}
+
+LPCSTR Util::SclGetAppCurDir()
+{
+	static char szAppPath[MAX_PATH] = { '\0' };
+	if (szAppPath[0] == '\0')
+	{
+		int i;
+		GetModuleFileNameA(GetModuleHandle(NULL), szAppPath, MAX_PATH);
+		for (i = (int)strlen(szAppPath) - 1; i > 0; --i)
+		{
+			if (szAppPath[i] == '\\')
+			{
+				break;
+			}
+		}
+
+		szAppPath[i + 1] = '\0';
+	}
+	return szAppPath;
 }

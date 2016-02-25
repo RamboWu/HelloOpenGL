@@ -58,7 +58,7 @@ void SetupRC()
 	shaderManager.InitializeStockShaders();
 
 	glEnable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -216,6 +216,7 @@ void RenderScene(void)
 	modelViewMatrix.PopMatrix();
 
 
+	// 将数据从 GPU的内存 放到 缓存中
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
 	glReadPixels(0, 0, window_width, window_height, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
@@ -237,7 +238,7 @@ void RenderScene(void)
 	modelViewMatrix.PushMatrix();
 	modelViewMatrix.LoadIdentity();
 	glDisable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUseProgram(myTexturedIdentityShader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureID);
@@ -248,7 +249,7 @@ void RenderScene(void)
 	//shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	screenQuad.Draw();
 	glEnable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	modelViewMatrix.PopMatrix();
 	projectionMatrix.PopMatrix();

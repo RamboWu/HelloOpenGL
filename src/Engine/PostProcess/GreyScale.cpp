@@ -1,10 +1,18 @@
+#include "../Core/World.h"
+#include "../core/GameViewPort.h"
 #include "GreyScale.h"
 #include "../../Util/Util.h"
 
-extern int window_width, window_height;
+extern World*		GWorld;
 
 void GreyScale::init()
 {
+	if (!GWorld || !GWorld->getGameViewPort())
+		return;
+
+	int window_width = GWorld->getGameViewPort()->getWindowWidth();
+	int window_height = GWorld->getGameViewPort()->getWindowHeight();
+
 	//创建一个正投影
 	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width / 2, window_height / 2, screenQuad);
 
@@ -47,10 +55,10 @@ void GreyScale::destroy()
 void GreyScale::onChangeSize(int nWidth, int nHeight)
 {
 	//创建一个正投影
-	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width / 3, window_height / 3, screenQuad);
+	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth / 3, nHeight / 3, screenQuad);
 
 	//准备像素缓冲区
-	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
+	pixelDataSize = nWidth*nHeight * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
 
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
 	glBufferData(GL_PIXEL_PACK_BUFFER, pixelDataSize, NULL, GL_DYNAMIC_COPY);
@@ -59,6 +67,12 @@ void GreyScale::onChangeSize(int nWidth, int nHeight)
 
 void GreyScale::render()
 {
+	if (!GWorld || !GWorld->getGameViewPort())
+		return;
+
+	int window_width = GWorld->getGameViewPort()->getWindowWidth();
+	int window_height = GWorld->getGameViewPort()->getWindowHeight();
+
 	// 将数据从 GPU的内存 放到 缓存中
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
 	glReadPixels(0, 0, window_width, window_height, GL_RGB, GL_UNSIGNED_BYTE, NULL);

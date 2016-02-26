@@ -1,6 +1,9 @@
+#include "World.h"
+#include "GameViewPort.h"
 #include "Camera.h"
 
-extern int window_width, window_height;
+
+extern World*		GWorld;
 
 void Camera::KeyEventHandler(unsigned char key, int x, int y)
 {
@@ -58,14 +61,18 @@ void Camera::MouseEventHandler(int button, int state, int x, int y)
 void Camera::MouseMotionEventHandler(int x, int y)
 {
 
-	float x_degree = (float(last_mouse_click_posx - x)) / window_width * 90;
-	float y_degree = (float(last_mouse_click_posy - y)) / window_height * 35;
+	if (GWorld && GWorld->getGameViewPort())
+	{
+		float x_degree = (float(last_mouse_click_posx - x)) / GWorld->getGameViewPort()->getWindowWidth() * 90;
+		float y_degree = (float(last_mouse_click_posy - y)) / GWorld->getGameViewPort()->getWindowHeight() * 35;
 
-	RotateWorld(float(m3dDegToRad(x_degree)), 0.0f, 1.0f, 0.0f);
-	RotateLocal(float(m3dDegToRad(-y_degree)), 1.0f, 0.0f, 0.0f);
+		RotateWorld(float(m3dDegToRad(x_degree)), 0.0f, 1.0f, 0.0f);
+		RotateLocal(float(m3dDegToRad(-y_degree)), 1.0f, 0.0f, 0.0f);
 
-	last_mouse_click_posx = x;
-	last_mouse_click_posy = y;
+		last_mouse_click_posx = x;
+		last_mouse_click_posy = y;
 
-	glutPostRedisplay();
+		glutPostRedisplay();
+	}
+	
 }

@@ -9,7 +9,7 @@
 #include <GLFrame.h>
 #include <GLMatrixStack.h>
 #include <GLGeometryTransform.h>
-#include <StopWatch.h>
+
 
 #include <math.h>
 #include <stdio.h>
@@ -23,62 +23,24 @@
 #endif
 
 #include "Camera.h"
+#include "World.h"
 #include "Engine/PostProcess/GreyScale.h"
 
-#define NUM_SPHERES 50
-GLFrame spheres[NUM_SPHERES];
 
-
-GLShaderManager		shaderManager;			// Shader Manager
-GLMatrixStack		modelViewMatrix;		// Modelview Matrix
-GLMatrixStack		projectionMatrix;		// Projection Matrix
-GLFrustum			viewFrustum;			// View Frustum
-GLGeometryTransform	transformPipeline;		// Geometry Transform Pipeline
-
-GLTriangleBatch		torusBatch;
-GLBatch				floorBatch;
-GLTriangleBatch     sphereBatch;
+extern World*		GWorld;
 Camera				camera;
 
 PostProcessRender   *greyscale_render;
 
-int window_width, window_height;
+
 
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
 // context. 
 void SetupRC()
 {
-	// Initialze Shader Manager
-	shaderManager.InitializeStockShaders();
-
-	glEnable(GL_DEPTH_TEST);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-	// This makes a torus
-	gltMakeTorus(torusBatch, 0.4f, 0.15f, 30, 30);
-
-	// This make a sphere
-	gltMakeSphere(sphereBatch, 0.1f, 26, 13);
-
-	floorBatch.Begin(GL_LINES, 324);
-	for (GLfloat x = -20.0; x <= 20.0f; x += 0.5) {
-		floorBatch.Vertex3f(x, -0.55f, 20.0f);
-		floorBatch.Vertex3f(x, -0.55f, -20.0f);
-
-		floorBatch.Vertex3f(20.0f, -0.55f, x);
-		floorBatch.Vertex3f(-20.0f, -0.55f, x);
-	}
-	floorBatch.End();
-
-	// Randomly place the spheres
-	for (int i = 0; i < NUM_SPHERES; i++) {
-		GLfloat x = ((GLfloat)((rand() % 400) - 200) * 0.1f);
-		GLfloat z = ((GLfloat)((rand() % 400) - 200) * 0.1f);
-		spheres[i].SetOrigin(x, 0.0f, z);
-	}
+	GWorld = new World();
+	GWorld->init();
 
 	greyscale_render = new GreyScale();
 	greyscale_render->init();
@@ -86,6 +48,9 @@ void SetupRC()
 
 void ShutdownRC(void)
 {
+	GWorld->destroy();
+	delete GWorld;
+
 	greyscale_render->destroy();
 	delete greyscale_render;
 }
@@ -95,17 +60,8 @@ void ShutdownRC(void)
 // Screen changes size or is initialized
 void ChangeSize(int nWidth, int nHeight)
 {
-	window_width = nWidth;
-	window_height = nHeight;
-	glViewport(0, 0, nWidth, nHeight);
 
-	// Create the projection matrix, and load it on the projection matrix stack
-	viewFrustum.SetPerspective(35.0f, float(nWidth) / float(nHeight), 1.0f, 100.0f);
-	projectionMatrix.LoadMatrix(viewFrustum.GetProjectionMatrix());
-
-	// Set the transformation pipeline to use the two matrix stacks 
-	transformPipeline.SetMatrixStacks(modelViewMatrix, projectionMatrix);
-
+	GWorld->onChangeSize(nWidth, nHeight);
 
 	greyscale_render->onChangeSize(nWidth, nHeight);
 }
@@ -114,65 +70,13 @@ void ChangeSize(int nWidth, int nHeight)
 // Called to draw scene
 void RenderScene(void)
 {
-	// Color values
-	static GLfloat vLightPos[] = { 1.0f, 1.0f, 0.0f };
-	static GLfloat vWhite[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	static GLfloat vFloorColor[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-	static GLfloat vTorusColor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	static GLfloat vSphereColor[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-
-	// Time Based animation
-	static CStopWatch	rotTimer;
-	float yRot = rotTimer.GetElapsedSeconds() * 60.0f;
-
 	// Clear the color and depth buffers
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	// Save the current modelview matrix (the identity matrix)
-	modelViewMatrix.PushMatrix();
 
-	M3DMatrix44f mCamera;
-	camera.GetCameraMatrix(mCamera);
-	modelViewMatrix.PushMatrix(mCamera);
-
-	// Draw the ground
-	shaderManager.UseStockShader(GLT_SHADER_FLAT,
-		transformPipeline.GetModelViewProjectionMatrix(),
-		vFloorColor);
-	floorBatch.Draw();
-
-	for (int i = 0; i < NUM_SPHERES; i++) {
-		modelViewMatrix.PushMatrix();
-		modelViewMatrix.MultMatrix(spheres[i]);
-		shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(),
-			vSphereColor);
-		sphereBatch.Draw();
-		modelViewMatrix.PopMatrix();
-	}
-
-	// Draw the spinning Torus
-	modelViewMatrix.Translate(0.0f, 0.0f, -2.5f);
-
-	// Save the Translation
-	modelViewMatrix.PushMatrix();
-
-	// Apply a rotation and draw the torus
-	modelViewMatrix.Rotate(yRot, 0.0f, 1.0f, 0.0f);
-	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vTorusColor);
-	torusBatch.Draw();
-	modelViewMatrix.PopMatrix(); // "Erase" the Rotation from before
-
-	// Apply another rotation, followed by a translation, then draw the sphere
-	modelViewMatrix.Rotate(yRot * -2.0f, 0.0f, 1.0f, 0.0f);
-	modelViewMatrix.Translate(0.8f, 0.0f, 0.0f);
-	shaderManager.UseStockShader(GLT_SHADER_FLAT, transformPipeline.GetModelViewProjectionMatrix(), vSphereColor);
-	sphereBatch.Draw();
-
-	// Restore the previous modleview matrix (the identity matrix)
-	modelViewMatrix.PopMatrix();
-	modelViewMatrix.PopMatrix();
-
+	GWorld->draw();
 
 	greyscale_render->render();
 

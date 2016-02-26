@@ -5,10 +5,10 @@
 
 extern World*		GWorld;
 
-void GreyScale::init()
+PostProcessRender* GreyScale::init()
 {
 	if (!GWorld || !GWorld->getGameViewPort())
-		return;
+		return this; 
 
 	int window_width = GWorld->getGameViewPort()->getWindowWidth();
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
@@ -40,6 +40,8 @@ void GreyScale::init()
 
 	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("GrayScale.vs", "GrayScale.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
+
+	return this;
 }
 
 void GreyScale::destroy()

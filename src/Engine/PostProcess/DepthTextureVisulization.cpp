@@ -5,10 +5,10 @@
 
 extern World*		GWorld;
 
-void DepthTextureVisulization::init()
+PostProcessRender* DepthTextureVisulization::init()
 {
 	if (!GWorld || !GWorld->getGameViewPort())
-		return;
+		return this;
 
 	int window_width = GWorld->getGameViewPort()->getWindowWidth();
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
@@ -49,6 +49,8 @@ void DepthTextureVisulization::init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 800, 600, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return this;
 }
 
 void DepthTextureVisulization::destroy()
@@ -64,7 +66,7 @@ void DepthTextureVisulization::destroy()
 void DepthTextureVisulization::onChangeSize(int nWidth, int nHeight)
 {
 	//创建一个正投影
-	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth, nHeight, screenQuad);
+	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth/3, nHeight/3, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = nWidth*nHeight * 3 * sizeof(unsigned int); // XXX This should be unsigned byte

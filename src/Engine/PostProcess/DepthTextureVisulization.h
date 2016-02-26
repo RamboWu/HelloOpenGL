@@ -1,5 +1,5 @@
-#ifndef __GREYSCALE_H_
-#define __GREYSCALE_H_
+#ifndef __DEPTHTEXTUREVISULIZATION_H_
+#define __DEPTHTEXTUREVISULIZATION_H_
 
 #include <GLTools.h>
 #include <GLShaderManager.h>
@@ -21,7 +21,7 @@ class DepthTextureVisulization : public PostProcessRender
 
 public:
 
-	virtual void init() override;
+	virtual PostProcessRender* init() override;
 
 	virtual void render() override;
 

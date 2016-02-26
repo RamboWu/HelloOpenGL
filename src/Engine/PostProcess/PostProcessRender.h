@@ -4,7 +4,7 @@
 class PostProcessRender
 {
 public:
-	virtual void init() = 0;
+	virtual PostProcessRender* init() = 0;
 
 	virtual void render() = 0;
 

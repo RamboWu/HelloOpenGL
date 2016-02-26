@@ -27,6 +27,7 @@
 #include "World.h"
 #include "GameViewPort.h"
 #include "Engine/PostProcess/GreyScale.h"
+#include "Engine/PostProcess/DepthTextureVisulization.h"
 
 
 extern World*		GWorld;
@@ -53,10 +54,7 @@ void SetupRC()
 // 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 // 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	PostProcessRender   *greyscale_render;
-	greyscale_render = new GreyScale();
-	greyscale_render->init();
-	post_process_chain.push_back(greyscale_render);
+	post_process_chain.push_back((new DepthTextureVisulization())->init());
 }
 
 void ShutdownRC(void)

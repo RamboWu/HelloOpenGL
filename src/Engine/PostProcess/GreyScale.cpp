@@ -38,7 +38,7 @@ void GreyScale::init()
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("TexturedIdentity.vs", "TexturedIdentity.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("GrayScale.vs", "GrayScale.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 }
 

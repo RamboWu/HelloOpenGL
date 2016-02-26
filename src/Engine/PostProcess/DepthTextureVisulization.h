@@ -16,7 +16,7 @@
 
 #include "PostProcessRender.h"
 
-class GreyScale : public PostProcessRender
+class DepthTextureVisulization : public PostProcessRender
 {
 
 public:
@@ -28,7 +28,7 @@ public:
 	virtual void destroy() override;
 
 	virtual void onChangeSize(int nWidth, int nHeight) override;
-		 
+
 private:
 
 	GLuint				pixBuffObjs[1];
@@ -38,6 +38,8 @@ private:
 
 	GLint				myTexturedIdentityShader;
 	GLuint				textureID;
+
+	GLuint				depthTextureID;
 };
 
 #endif

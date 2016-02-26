@@ -39,6 +39,7 @@ private:
 	GLint				myTexturedIdentityShader;
 	GLuint				textureID;
 
+	GLuint				depthTextureID;
 };
 
 #endif

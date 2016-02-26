@@ -33,8 +33,6 @@ Camera				camera;
 
 PostProcessRender   *greyscale_render;
 
-GLuint				depthTextureID;
-void				*pixelData;
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
 // context. 
@@ -51,14 +49,6 @@ void SetupRC()
 // 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 // 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 // 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glBindTexture(GL_TEXTURE_2D, depthTextureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 800, 600, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	greyscale_render = new GreyScale();
 	greyscale_render->init();
@@ -101,17 +91,6 @@ void RenderScene(void)
 
 
 	GWorld->draw();
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, depthTextureID);
-	// Grab the screen pixels and copy into local memory
-	//glReadPixels(0, 0, screenWidth, screenHeight, GL_DEPTH_COMPONENT, GL_FLOAT, pixelData);
-
-	// Push pixels from client memory into texture
-	// Setup texture unit for new blur, this gets imcremented every frame
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelData);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, screenWidth, screenHeight, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	greyscale_render->render();
 

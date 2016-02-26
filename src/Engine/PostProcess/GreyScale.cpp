@@ -14,7 +14,7 @@ void GreyScale::init()
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
 
 	//创建一个正投影
-	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width / 2, window_height / 2, screenQuad);
+	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width, window_height, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
@@ -38,8 +38,17 @@ void GreyScale::init()
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("GrayScale.vs", "GrayScale.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("DepthTexture.vs", "DepthTexture.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
+
+	glGenTextures(1, &depthTextureID);
+	glBindTexture(GL_TEXTURE_2D, depthTextureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 800, 600, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void GreyScale::destroy()
@@ -55,7 +64,7 @@ void GreyScale::destroy()
 void GreyScale::onChangeSize(int nWidth, int nHeight)
 {
 	//创建一个正投影
-	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth / 3, nHeight / 3, screenQuad);
+	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth/3, nHeight/3, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = nWidth*nHeight * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
@@ -72,6 +81,18 @@ void GreyScale::render()
 
 	int window_width = GWorld->getGameViewPort()->getWindowWidth();
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthTextureID);
+	// Grab the screen pixels and copy into local memory
+	//glReadPixels(0, 0, screenWidth, screenHeight, GL_DEPTH_COMPONENT, GL_FLOAT, pixelData);
+
+	// Push pixels from client memory into texture
+	// Setup texture unit for new blur, this gets imcremented every frame
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelData);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, window_width, window_height, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 
 	// 将数据从 GPU的内存 放到 缓存中
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
@@ -96,6 +117,9 @@ void GreyScale::render()
 	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, orthoMatrix);
 	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
 	glUniform1i(iTextureUniform, 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthTextureID);
+	glUniform1i(glGetUniformLocation(myTexturedIdentityShader, "depthTexture"), 0);
 	//shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	screenQuad.Draw();
 

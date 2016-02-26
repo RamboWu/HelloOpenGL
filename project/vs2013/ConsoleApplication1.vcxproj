@@ -88,6 +88,7 @@
     <ClCompile Include="..\..\src\Engine\Core\Camera.cpp" />
     <ClCompile Include="..\..\src\Engine\Core\GameViewPort.cpp" />
     <ClCompile Include="..\..\src\Engine\Core\World.cpp" />
+    <ClCompile Include="..\..\src\Engine\PostProcess\DepthTextureVisulization.cpp" />
     <ClCompile Include="..\..\src\Engine\PostProcess\GreyScale.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Util\Util.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\..\src\Engine\Core\Camera.h" />
     <ClInclude Include="..\..\src\Engine\Core\GameViewPort.h" />
     <ClInclude Include="..\..\src\Engine\Core\World.h" />
+    <ClInclude Include="..\..\src\Engine\PostProcess\DepthTextureVisulization.h" />
     <ClInclude Include="..\..\src\Engine\PostProcess\GreyScale.h" />
     <ClInclude Include="..\..\src\Engine\PostProcess\PostProcessRender.h" />
     <ClInclude Include="..\..\src\Util\Util.h" />

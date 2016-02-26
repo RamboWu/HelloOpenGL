@@ -86,6 +86,8 @@
     <ClCompile Include="..\..\common\GLTools\src\GLTriangleBatch.cpp" />
     <ClCompile Include="..\..\common\GLTools\src\math3d.cpp" />
     <ClCompile Include="..\..\src\Engine\Core\Camera.cpp" />
+    <ClCompile Include="..\..\src\Engine\Core\GameViewPort.cpp" />
+    <ClCompile Include="..\..\src\Engine\Core\World.cpp" />
     <ClCompile Include="..\..\src\Engine\PostProcess\GreyScale.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Util\Util.cpp" />

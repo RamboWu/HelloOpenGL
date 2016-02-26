@@ -66,6 +66,12 @@
     <ClCompile Include="..\..\src\Engine\PostProcess\GreyScale.cpp">
       <Filter>Engine\PostProcess</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Engine\Core\World.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Engine\Core\GameViewPort.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Engine\Core\Camera.h">

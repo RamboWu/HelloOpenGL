@@ -13,6 +13,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <vector>
 #include "Util/Util.h"
 
 #ifdef __APPLE__
@@ -26,12 +27,15 @@
 #include "World.h"
 #include "GameViewPort.h"
 #include "Engine/PostProcess/GreyScale.h"
+#include "Engine/PostProcess/DepthTextureVisulization.h"
 
 
 extern World*		GWorld;
 Camera				camera;
 
-PostProcessRender   *greyscale_render;
+std::vector<PostProcessRender*>  post_process_chain;
+
+
 
 //////////////////////////////////////////////////////////////////
 // This function does any needed initialization on the rendering
@@ -50,8 +54,7 @@ void SetupRC()
 // 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 // 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	greyscale_render = new GreyScale();
-	greyscale_render->init();
+	post_process_chain.push_back((new DepthTextureVisulization())->init());
 }
 
 void ShutdownRC(void)
@@ -59,8 +62,14 @@ void ShutdownRC(void)
 	GWorld->destroy();
 	delete GWorld;
 
-	greyscale_render->destroy();
-	delete greyscale_render;
+
+	std::vector<PostProcessRender*>::iterator begin = post_process_chain.begin();
+	while (begin != post_process_chain.end())
+	{
+		(*begin)->destroy();
+		delete (*begin);
+		begin++;
+	}
 }
 
 
@@ -71,7 +80,12 @@ void ChangeSize(int nWidth, int nHeight)
 
 	GWorld->onChangeSize(nWidth, nHeight);
 
-	greyscale_render->onChangeSize(nWidth, nHeight);
+	std::vector<PostProcessRender*>::iterator begin = post_process_chain.begin();
+	while (begin != post_process_chain.end())
+	{
+		(*begin)->onChangeSize(nWidth, nHeight);
+		begin++;
+	}
 }
 
 
@@ -92,7 +106,12 @@ void RenderScene(void)
 
 	GWorld->draw();
 
-	greyscale_render->render();
+	std::vector<PostProcessRender*>::iterator begin = post_process_chain.begin();
+	while (begin != post_process_chain.end())
+	{
+		(*begin)->render();
+		begin++;
+	}
 
 	// Do the buffer Swap
 	glutSwapBuffers();

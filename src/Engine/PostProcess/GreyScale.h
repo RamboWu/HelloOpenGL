@@ -21,7 +21,7 @@ class GreyScale : public PostProcessRender
 
 public:
 
-	virtual void init() override;
+	virtual PostProcessRender* init() override;
 
 	virtual void render() override;
 

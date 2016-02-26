@@ -5,10 +5,10 @@
 
 extern World*		GWorld;
 
-void GreyScale::init()
+PostProcessRender* GreyScale::init()
 {
 	if (!GWorld || !GWorld->getGameViewPort())
-		return;
+		return this; 
 
 	int window_width = GWorld->getGameViewPort()->getWindowWidth();
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
@@ -28,18 +28,20 @@ void GreyScale::init()
 
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	if (Util::LoadTGATexture("stone.tga", GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE))
-	{
-		fprintf(stderr, "LoadTGATexture stone.tga success");
-	}
-	else
-	{
-		fprintf(stderr, "LoadTGATexture stone.tga failed");
-	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("GrayScale.vs", "GrayScale.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
+
+	return this;
 }
 
 void GreyScale::destroy()

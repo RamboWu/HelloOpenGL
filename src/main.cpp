@@ -55,7 +55,7 @@ void SetupRC()
 // 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 // 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	//post_process_chain.push_back((new FogOfWar())->init());
+	post_process_chain.push_back((new FogOfWar())->init());
 }
 
 void ShutdownRC(void)
@@ -106,12 +106,12 @@ void RenderScene(void)
 
 
 	GWorld->draw();
-	M3DMatrix44f tmp1;
+	/*M3DMatrix44f tmp1;
 	camera.GetCameraMatrix(tmp1);
 	Util::unprojectScreenToWorld(
 		0, 0,
 		GWorld->getGameViewPort()->GetProjectionMatrix(), tmp1,
-		GWorld->getGameViewPort()->getWindowWidth(), GWorld->getGameViewPort()->getWindowHeight());
+		GWorld->getGameViewPort()->getWindowWidth(), GWorld->getGameViewPort()->getWindowHeight());*/
 
 
 

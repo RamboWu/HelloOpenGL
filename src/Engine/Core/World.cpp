@@ -31,7 +31,7 @@ void World::init()
 	// This make a sphere
 	gltMakeSphere(sphereBatch, 0.1f, 26, 13);
 
-	floorBatch.Begin(GL_QUADS, 324);
+	floorBatch.Begin(GL_TRIANGLE_STRIP, 324);
 	for (GLfloat x = -20.0; x <= 20.0f; x += 0.5) {
 		floorBatch.Vertex3f(x, -0.55f, 20.0f);
 		floorBatch.Vertex3f(x, -0.55f, -20.0f);

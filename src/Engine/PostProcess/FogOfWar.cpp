@@ -1,11 +1,14 @@
+#include <math3d.h>
 #include "../Core/World.h"
+#include "../Core/Camera.h"
 #include "../core/GameViewPort.h"
-#include "DepthTextureVisulization.h"
+#include "FogOfWar.h"
 #include "../../Util/Util.h"
 
 extern World*		GWorld;
+extern Camera				camera;
 
-PostProcessRender* DepthTextureVisulization::init()
+PostProcessRender* FogOfWar::init()
 {
 	if (!GWorld || !GWorld->getGameViewPort())
 		return this;
@@ -38,7 +41,7 @@ PostProcessRender* DepthTextureVisulization::init()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("DepthTexture.vs", "DepthTexture.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("FogOfWar.vs", "FogOfWar.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 
 	glGenTextures(1, &depthTextureID);
@@ -53,7 +56,7 @@ PostProcessRender* DepthTextureVisulization::init()
 	return this;
 }
 
-void DepthTextureVisulization::destroy()
+void FogOfWar::destroy()
 {
 	// delete PBO
 	glDeleteBuffers(1, pixBuffObjs);
@@ -63,10 +66,10 @@ void DepthTextureVisulization::destroy()
 	glDeleteProgram(myTexturedIdentityShader);
 }
 
-void DepthTextureVisulization::onChangeSize(int nWidth, int nHeight)
+void FogOfWar::onChangeSize(int nWidth, int nHeight)
 {
 	//创建一个正投影
-	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth/3, nHeight/3, screenQuad);
+	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth, nHeight, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = nWidth*nHeight * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
@@ -76,7 +79,7 @@ void DepthTextureVisulization::onChangeSize(int nWidth, int nHeight)
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 }
 
-void DepthTextureVisulization::render()
+void FogOfWar::render()
 {
 	if (!GWorld || !GWorld->getGameViewPort())
 		return;
@@ -117,6 +120,17 @@ void DepthTextureVisulization::render()
 	glUseProgram(myTexturedIdentityShader);
 	GLint iMvpUniform = glGetUniformLocation(myTexturedIdentityShader, "mvpMatrix");
 	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, orthoMatrix);
+	//计算screenToWorld的矩阵，其实就是ViewProjection的转置矩阵
+	GLint iScreenToWorldUniform = glGetUniformLocation(myTexturedIdentityShader, "screenToWorldMatrix");
+	M3DMatrix44f tmp1,tmp2,tmp3;
+	camera.GetCameraMatrix(tmp1);
+	Util::printMaxtrix44f(tmp1);
+	m3dMatrixMultiply44(tmp2, GWorld->getGameViewPort()->GetProjectionMatrix(), tmp1);
+	Util::printMaxtrix44f(GWorld->getGameViewPort()->GetProjectionMatrix());
+	Util::printMaxtrix44f(tmp2);
+	m3dInvertMatrix44(tmp3, tmp2);
+	Util::printMaxtrix44f(tmp3);
+	glUniformMatrix4fv(iScreenToWorldUniform, 1, GL_FALSE, tmp3);
 	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
 	glUniform1i(iTextureUniform, 1);
 	glActiveTexture(GL_TEXTURE0);

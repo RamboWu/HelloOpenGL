@@ -75,6 +75,9 @@
     <ClCompile Include="..\..\src\Engine\PostProcess\DepthTextureVisulization.cpp">
       <Filter>Engine\PostProcess</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Engine\PostProcess\FogOfWar.cpp">
+      <Filter>Engine\PostProcess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Engine\Core\Camera.h">
@@ -129,6 +132,9 @@
       <Filter>Engine\PostProcess</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Engine\PostProcess\DepthTextureVisulization.h">
+      <Filter>Engine\PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Engine\PostProcess\FogOfWar.h">
       <Filter>Engine\PostProcess</Filter>
     </ClInclude>
   </ItemGroup>

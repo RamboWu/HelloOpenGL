@@ -1,5 +1,5 @@
-#ifndef __DEPTHTEXTUREVISULIZATION_H_
-#define __DEPTHTEXTUREVISULIZATION_H_
+#ifndef __FOGOFWAR_H_
+#define __FOGOFWAR_H_
 
 #include <GLTools.h>
 #include <GLShaderManager.h>

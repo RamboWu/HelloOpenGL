@@ -23,5 +23,7 @@ public:
 	static bool LoadTGATexture(const char *szFileName, GLenum minFilter, GLenum magFilter, GLenum wrapMode);
 
 	static LPCSTR SclGetAppCurDir();
+
+	static void unprojectScreenToWorld(int x, int y, const M3DMatrix44f projection, const M3DMatrix44f view, int width, int height);
 };
 #endif

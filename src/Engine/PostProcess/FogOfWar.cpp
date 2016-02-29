@@ -38,7 +38,7 @@ PostProcessRender* FogOfWar::init()
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("DepthTexture.vs", "DepthTexture.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("FogOfWar.vs", "FogOfWar.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 
 	glGenTextures(1, &depthTextureID);

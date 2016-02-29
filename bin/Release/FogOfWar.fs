@@ -4,7 +4,7 @@
 // OpenGL SuperBible
 #version 130
 
-
+uniform mat4 screenToWorldMatrix;
 uniform sampler2D colorMap;
 uniform sampler2D depthTexture;
 
@@ -29,6 +29,14 @@ void main() {
   else
   {
       float z = texture(depthTexture, vVaryingTexCoords.st).r;
-      vFragColor.rgb = vec3(z); 
+      float z_dc = 1-2*z;
+      float x_dc = 2*vVaryingTexCoords.s - 1;
+      float y_dc = 2*vVaryingTexCoords.t - 1;
+      vec4 world_pos = screenToWorldMatrix* vec4(x_dc,y_dc,z_dc,1);
+      vec3 FogOFWarUV = world_pos.xyz / world_pos.w;
+      if (FogOFWarUV.x > 0 && FogOFWarUV.x < 20 && FogOFWarUV.z > 0 && FogOFWarUV.z < 20)
+        vFragColor.rgb = vec3(0); 
+      else
+        vFragColor.rgb = vec3(z); 
   }
 }

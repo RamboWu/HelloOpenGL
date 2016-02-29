@@ -1,9 +1,12 @@
+#include <math3d.h>
 #include "../Core/World.h"
+#include "../Core/Camera.h"
 #include "../core/GameViewPort.h"
 #include "FogOfWar.h"
 #include "../../Util/Util.h"
 
 extern World*		GWorld;
+extern Camera				camera;
 
 PostProcessRender* FogOfWar::init()
 {
@@ -117,6 +120,16 @@ void FogOfWar::render()
 	glUseProgram(myTexturedIdentityShader);
 	GLint iMvpUniform = glGetUniformLocation(myTexturedIdentityShader, "mvpMatrix");
 	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, orthoMatrix);
+	//����screenToWorld�ľ�����ʵ����ViewProjection��ת�þ���
+	GLint iScreenToWorldUniform = glGetUniformLocation(myTexturedIdentityShader, "screenToWorldMatrix");
+	M3DMatrix44f tmp1,tmp2,tmp3;
+	camera.GetCameraMatrix(tmp1);
+	//Util::printMaxtrix44f(tmp1);
+	m3dMatrixMultiply44(tmp2, GWorld->getGameViewPort()->GetProjectionMatrix(), tmp1);
+	//Util::printMaxtrix44f(tmp2);
+	m3dInvertMatrix44(tmp3, tmp2);
+	//Util::printMaxtrix44f(tmp3);
+	glUniformMatrix4fv(iScreenToWorldUniform, 1, GL_FALSE, tmp3);
 	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
 	glUniform1i(iTextureUniform, 1);
 	glActiveTexture(GL_TEXTURE0);

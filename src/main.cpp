@@ -28,6 +28,7 @@
 #include "GameViewPort.h"
 #include "Engine/PostProcess/GreyScale.h"
 #include "Engine/PostProcess/DepthTextureVisulization.h"
+#include "Engine/PostProcess/FogOfWar.h"
 
 
 extern World*		GWorld;
@@ -54,7 +55,7 @@ void SetupRC()
 // 	glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 // 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	post_process_chain.push_back((new DepthTextureVisulization())->init());
+	post_process_chain.push_back((new FogOfWar())->init());
 }
 
 void ShutdownRC(void)

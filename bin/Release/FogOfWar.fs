@@ -16,18 +16,19 @@ void main() {
   if(vVaryingTexCoords.s < 0.3) {
     vFragColor = texture(colorMap, vVaryingTexCoords.st);
   }
-  else {
+  else if (vVaryingTexCoords.s < 0.6)
+  {
  
     float z = texture(depthTexture, vVaryingTexCoords.st).r;
     float n = 1.0;
     float f = 30.0;
     float c = (2.0 * n) / (f + n - z * (f - n));
  
-    if(vVaryingTexCoords.s >= 0.3 && vVaryingTexCoords.s < 0.6) {
-      vFragColor.rgb = vec3(c); 
-    }
-    else { 
+    vFragColor.rgb = vec3(c); 
+  }
+  else
+  {
+      float z = texture(depthTexture, vVaryingTexCoords.st).r;
       vFragColor.rgb = vec3(z); 
-    }
   }
 }

@@ -85,7 +85,7 @@ void Util::unprojectScreenToWorld(int x, int y, const M3DMatrix44f projection, c
 
 	float dc_x = float(x) / width * 2 - 1;
 	float dc_y = float(y) / height * 2 - 1;
-	float dc_z = 1 - winZ * 2;
+	float dc_z = winZ * 2 - 1;
 
  	GLint    viewport[4];
 	M3DMatrix44d view_m, projection_m;
@@ -109,9 +109,11 @@ void Util::unprojectScreenToWorld(int x, int y, const M3DMatrix44f projection, c
 	dc[1] = dc_y;
 	dc[2] = dc_z;
 	dc[3] = 1;
-	matrixMultiplyVector4f(world_pos, tmp2, dc);
-	fprintf(stderr, "world[%.2f,%.2f,%.2f,%.2f]\n", dc[0], dc[1], dc[2], dc[3]);
 
+	m3dTransformVector4(world_pos, dc, tmp2);
+	//matrixMultiplyVector4f(world_pos, tmp2, dc);
+	fprintf(stderr, "dc[%.2f,%.2f,%.2f,%.2f]\n", dc[0], dc[1], dc[2], dc[3]);
+	fprintf(stderr, "world[%.2f,%.2f,%.2f,%.2f]\n", world_pos[0] / world_pos[3], world_pos[1] / world_pos[3], world_pos[2] / world_pos[3], 1.0f);
 }
 
 void Util::matrixMultiplyVector4f(M3DVector4f vOut, const M3DMatrix44f m, const M3DVector4f v)

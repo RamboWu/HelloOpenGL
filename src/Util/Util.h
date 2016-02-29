@@ -25,5 +25,9 @@ public:
 	static LPCSTR SclGetAppCurDir();
 
 	static void unprojectScreenToWorld(int x, int y, const M3DMatrix44f projection, const M3DMatrix44f view, int width, int height);
+
+	static void matrixMultiplyVector4f(M3DVector4f vOut, const M3DMatrix44f m, const M3DVector4f v);
+
+	static void copy44fTo44d(M3DMatrix44d vOut, const M3DMatrix44f m);
 };
 #endif

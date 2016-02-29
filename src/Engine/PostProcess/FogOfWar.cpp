@@ -69,7 +69,7 @@ void FogOfWar::destroy()
 void FogOfWar::onChangeSize(int nWidth, int nHeight)
 {
 	//´´½¨Ò»¸öÕýÍ¶Ó°
-	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth / 3, nHeight / 3, screenQuad);
+	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth, nHeight, screenQuad);
 
 	//×¼±¸ÏñËØ»º³åÇø
 	pixelDataSize = nWidth*nHeight * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
@@ -120,15 +120,16 @@ void FogOfWar::render()
 	glUseProgram(myTexturedIdentityShader);
 	GLint iMvpUniform = glGetUniformLocation(myTexturedIdentityShader, "mvpMatrix");
 	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, orthoMatrix);
-	//ï¿½ï¿½ï¿½ï¿½screenToWorldï¿½Ä¾ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ViewProjectionï¿½ï¿½×ªï¿½Ã¾ï¿½ï¿½ï¿½
+	//¼ÆËãscreenToWorldµÄ¾ØÕó£¬ÆäÊµ¾ÍÊÇViewProjectionµÄ×ªÖÃ¾ØÕó
 	GLint iScreenToWorldUniform = glGetUniformLocation(myTexturedIdentityShader, "screenToWorldMatrix");
 	M3DMatrix44f tmp1,tmp2,tmp3;
 	camera.GetCameraMatrix(tmp1);
-	//Util::printMaxtrix44f(tmp1);
+	Util::printMaxtrix44f(tmp1);
 	m3dMatrixMultiply44(tmp2, GWorld->getGameViewPort()->GetProjectionMatrix(), tmp1);
-	//Util::printMaxtrix44f(tmp2);
+	Util::printMaxtrix44f(GWorld->getGameViewPort()->GetProjectionMatrix());
+	Util::printMaxtrix44f(tmp2);
 	m3dInvertMatrix44(tmp3, tmp2);
-	//Util::printMaxtrix44f(tmp3);
+	Util::printMaxtrix44f(tmp3);
 	glUniformMatrix4fv(iScreenToWorldUniform, 1, GL_FALSE, tmp3);
 	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
 	glUniform1i(iTextureUniform, 1);

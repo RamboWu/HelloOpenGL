@@ -106,14 +106,6 @@ void RenderScene(void)
 
 
 	GWorld->draw();
-	/*M3DMatrix44f tmp1;
-	camera.GetCameraMatrix(tmp1);
-	Util::unprojectScreenToWorld(
-		0, 0,
-		GWorld->getGameViewPort()->GetProjectionMatrix(), tmp1,
-		GWorld->getGameViewPort()->getWindowWidth(), GWorld->getGameViewPort()->getWindowHeight());*/
-
-
 
 	std::vector<PostProcessRender*>::iterator begin = post_process_chain.begin();
 	while (begin != post_process_chain.end())

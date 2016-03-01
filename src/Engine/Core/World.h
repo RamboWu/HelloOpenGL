@@ -40,9 +40,12 @@ protected:
 	GameViewPort		*m_game_view_port;
 	GLTriangleBatch		torusBatch;
 	GLBatch				floorBatch;
+	GLuint				floor_texture_id;
 	GLTriangleBatch     sphereBatch;
 
 	GLFrame spheres[NUM_SPHERES];
 	GLShaderManager		shaderManager;			// Shader Manager
+
+	
 };
 #endif

@@ -2,6 +2,8 @@
 #include "GameViewPort.h"
 #include "Camera.h"
 
+#include "../../Util/Util.h"
+
 #include <StopWatch.h>
 
 World*	GWorld = NULL;
@@ -20,6 +22,7 @@ void World::update()
 
 void World::init()
 {
+
 	m_game_view_port = new GameViewPort();
 
 	// Initialze Shader Manager
@@ -31,7 +34,31 @@ void World::init()
 	// This make a sphere
 	gltMakeSphere(sphereBatch, 0.1f, 26, 13);
 
-	floorBatch.Begin(GL_TRIANGLE_STRIP, 324);
+
+	// Load textures
+	glGenTextures(1, &floor_texture_id);
+	glBindTexture(GL_TEXTURE_2D, floor_texture_id);
+	Util::LoadTGATexture("brick.tga", GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
+	floorBatch.Begin(GL_TRIANGLE_STRIP, 4, 1);
+
+		floorBatch.MultiTexCoord2f(0, 0.0f, 0.0f);
+		floorBatch.Vertex3f(-20.0f, -0.55f, 20.0f);
+
+		floorBatch.MultiTexCoord2f(0, 1.0f, 0.0f);
+		floorBatch.Vertex3f(20.0f, -0.55f, 20.0f);
+
+		floorBatch.MultiTexCoord2f(0, 0.0f, 1.0f);
+		floorBatch.Vertex3f(-20.0f, -0.55f, -20.0f);
+
+		floorBatch.MultiTexCoord2f(0, 1.0f, 1.0f);
+		floorBatch.Vertex3f(20.0f, -0.55f, -20.0f);
+
+	floorBatch.End();
+
+	/*floorBatch.Begin(GL_TRIANGLE_STRIP, 324, 1);
 	for (GLfloat x = -20.0; x <= 20.0f; x += 0.5) {
 		floorBatch.Vertex3f(x, -0.55f, 20.0f);
 		floorBatch.Vertex3f(x, -0.55f, -20.0f);
@@ -39,7 +66,7 @@ void World::init()
 		floorBatch.Vertex3f(20.0f, -0.55f, x);
 		floorBatch.Vertex3f(-20.0f, -0.55f, x);
 	}
-	floorBatch.End();
+	floorBatch.End();*/
 
 
 	// Randomly place the spheres
@@ -79,10 +106,13 @@ void World::draw()
 	modelViewMatrix.PushMatrix(mCamera);
 
 	// Draw the ground
-	shaderManager.UseStockShader(GLT_SHADER_FLAT,
+	/*shaderManager.UseStockShader(GLT_SHADER_FLAT,
 		transformPipeline.GetModelViewProjectionMatrix(),
-		vFloorColor);
+		vFloorColor);*/
+	glBindTexture(GL_TEXTURE_2D, floor_texture_id);
+	shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	floorBatch.Draw();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	for (int i = 0; i < NUM_SPHERES; i++) {
 		modelViewMatrix.PushMatrix();

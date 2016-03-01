@@ -41,7 +41,7 @@ PostProcessRender* FogOfWar::init()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("FogOfWar.vs", "FogOfWar.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("../../src/Shader/FogOfWar.vs", "../../src/Shader/FogOfWar.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 
 	glGenTextures(1, &depthTextureID);
@@ -87,24 +87,17 @@ void FogOfWar::render()
 	int window_width = GWorld->getGameViewPort()->getWindowWidth();
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
 
+	//获取深度纹理
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTextureID);
-	// Grab the screen pixels and copy into local memory
-	//glReadPixels(0, 0, screenWidth, screenHeight, GL_DEPTH_COMPONENT, GL_FLOAT, pixelData);
-
-	// Push pixels from client memory into texture
-	// Setup texture unit for new blur, this gets imcremented every frame
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelData);
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, window_width, window_height, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-
-	// 将数据从 GPU的内存 放到 缓存中
+	
+	//获取屏幕颜色纹理
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
 	glReadPixels(0, 0, window_width, window_height, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-
-
 	// Next bind the PBO as the unpack buffer, then push the pixels straight into the texture
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pixBuffObjs[0]);
 
@@ -117,6 +110,7 @@ void FogOfWar::render()
 
 
 	glDisable(GL_DEPTH_TEST);
+
 	glUseProgram(myTexturedIdentityShader);
 	GLint iMvpUniform = glGetUniformLocation(myTexturedIdentityShader, "mvpMatrix");
 	glUniformMatrix4fv(iMvpUniform, 1, GL_FALSE, orthoMatrix);
@@ -124,19 +118,14 @@ void FogOfWar::render()
 	GLint iScreenToWorldUniform = glGetUniformLocation(myTexturedIdentityShader, "screenToWorldMatrix");
 	M3DMatrix44f tmp1,tmp2,tmp3;
 	camera.GetCameraMatrix(tmp1);
-	//Util::printMaxtrix44f(tmp1);
 	m3dMatrixMultiply44(tmp2, GWorld->getGameViewPort()->GetProjectionMatrix(), tmp1);
-	//Util::printMaxtrix44f(GWorld->getGameViewPort()->GetProjectionMatrix());
-	//Util::printMaxtrix44f(tmp2);
 	m3dInvertMatrix44(tmp3, tmp2);
-	//Util::printMaxtrix44f(tmp3);
 	glUniformMatrix4fv(iScreenToWorldUniform, 1, GL_FALSE, tmp3);
 	GLint iTextureUniform = glGetUniformLocation(myTexturedIdentityShader, "colorMap");
 	glUniform1i(iTextureUniform, 1);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, depthTextureID);
 	glUniform1i(glGetUniformLocation(myTexturedIdentityShader, "depthTexture"), 0);
-	//shaderManager.UseStockShader(GLT_SHADER_TEXTURE_REPLACE, transformPipeline.GetModelViewProjectionMatrix(), 0);
 	screenQuad.Draw();
 
 	glEnable(GL_DEPTH_TEST);

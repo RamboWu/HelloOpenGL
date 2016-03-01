@@ -38,7 +38,7 @@ PostProcessRender* DepthTextureVisulization::init()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("DepthTexture.vs", "DepthTexture.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("../../src/Shader/DepthTexture.vs", "../../src/Shader/DepthTexture.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 
 	glGenTextures(1, &depthTextureID);

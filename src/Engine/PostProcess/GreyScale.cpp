@@ -38,7 +38,7 @@ PostProcessRender* GreyScale::init()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, window_width, window_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("GrayScale.vs", "GrayScale.fs", 2,
+	myTexturedIdentityShader = gltLoadShaderPairWithAttributes("../../src/Shader/GrayScale.vs", "../../src/Shader/GrayScale.fs", 2,
 		GLT_ATTRIBUTE_VERTEX, "vVertex", GLT_ATTRIBUTE_TEXTURE0, "vTexCoords");
 
 	return this;

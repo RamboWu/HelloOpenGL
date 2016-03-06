@@ -31,5 +31,8 @@ public:
 	static void copy44fTo44d(M3DMatrix44d vOut, const M3DMatrix44f m);
     
     static GLbyte *ReadTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iComponents, GLenum *eFormat);
+    
+    static void gltGenerateOrtho2DMat(GLuint width, GLuint height, M3DMatrix44f &orthoMatrix, GLuint x, GLuint y, GLuint tex_width, GLuint tex_height, GLBatch &texQuad);
+
 };
 #endif

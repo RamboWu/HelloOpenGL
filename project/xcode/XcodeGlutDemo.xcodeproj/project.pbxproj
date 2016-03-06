@@ -296,6 +296,7 @@
 		4F91466C1C5DA53500EF3AD9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../bin/$(CONFIGURATION)";
 				HEADER_SEARCH_PATHS = "$(GLTOOLS_INCLUDE)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -308,6 +309,7 @@
 		4F91466D1C5DA53500EF3AD9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../bin/$(CONFIGURATION)";
 				HEADER_SEARCH_PATHS = "$(GLTOOLS_INCLUDE)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

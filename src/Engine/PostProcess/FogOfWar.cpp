@@ -17,7 +17,7 @@ PostProcessRender* FogOfWar::init()
 	int window_height = GWorld->getGameViewPort()->getWindowHeight();
 
 	//创建一个正投影
-	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, 0, 0, window_width, window_height, screenQuad);
+	gltGenerateOrtho2DMat(window_width, window_height, orthoMatrix, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = window_width*window_height * 3 * sizeof(unsigned int); // XXX This should be unsigned byte
@@ -69,7 +69,7 @@ void FogOfWar::destroy()
 void FogOfWar::onChangeSize(int nWidth, int nHeight)
 {
 	//创建一个正投影
-	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, 0, 0, nWidth, nHeight, screenQuad);
+	gltGenerateOrtho2DMat(nWidth, nHeight, orthoMatrix, screenQuad);
 
 	//准备像素缓冲区
 	pixelDataSize = nWidth*nHeight * 3 * sizeof(unsigned int); // XXX This should be unsigned byte

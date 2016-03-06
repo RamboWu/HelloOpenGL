@@ -1,5 +1,5 @@
 ﻿//#pragma comment(lib, "glew32.lib")
-#pragma comment(lib, "glew32s.lib")
+
 //#pragma comment(lib, "freeglut.lib")
 
 #include <GLTools.h>
@@ -19,6 +19,7 @@
 #ifdef __APPLE__
 #include <glut/glut.h>
 #else
+#pragma comment(lib, "glew32s.lib")
 #define FREEGLUT_STATIC
 #include <GL/glut.h>
 #endif

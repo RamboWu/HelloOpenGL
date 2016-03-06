@@ -17,6 +17,7 @@
 #include "Util/Util.h"
 
 #ifdef __APPLE__
+//#include <OpenGL/gl3.h>
 #include <glut/glut.h>
 #else
 #pragma comment(lib, "glew32s.lib")
@@ -147,9 +148,11 @@ void MouseMotionEventHandler(int x, int y)
 int main(int argc, char* argv[])
 {
 	gltSetWorkingDirectory(argv[0]);
-
+    //glutInitContextVersion(3,2); /* or later versions, core was introduced only with 3.2 */
+    //glutInitContextProfile(GLUT_CORE_PROFILE);
+    
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
 	glutInitWindowSize(800, 600);
 
 	glutCreateWindow("OpenGL SphereWorld");

@@ -260,3 +260,54 @@ void Util::copy44fTo44d(M3DMatrix44d vOut, const M3DMatrix44f m)
 		vOut[i] = GLdouble(m[i]);
 	}
 }
+
+
+void Util::gltGenerateOrtho2DMat(GLuint screenWidth, GLuint screenHeight, M3DMatrix44f &orthoMatrix, GLuint x, GLuint y, GLuint tex_width, GLuint tex_height, GLBatch &texQuad)
+{
+    float right = (float)screenWidth;
+    float left = 0.0f;
+    float top = (float)screenHeight;
+    float bottom = 0.0f;
+    
+    // set ortho matrix
+    orthoMatrix[0] = (float)(2 / (right - left));
+    orthoMatrix[1] = 0.0;
+    orthoMatrix[2] = 0.0;
+    orthoMatrix[3] = 0.0;
+    
+    orthoMatrix[4] = 0.0;
+    orthoMatrix[5] = (float)(2 / (top - bottom));
+    orthoMatrix[6] = 0.0;
+    orthoMatrix[7] = 0.0;
+    
+    orthoMatrix[8] = 0.0;
+    orthoMatrix[9] = 0.0;
+    orthoMatrix[10] = (float)(-2 / (1.0 - 0.0));
+    orthoMatrix[11] = 0.0;
+    
+    orthoMatrix[12] = -1 * (right + left) / (right - left);
+    orthoMatrix[13] = -1 * (top + bottom) / (top - bottom);
+    orthoMatrix[14] = -1.0f;
+    orthoMatrix[15] = 1.0;
+    
+    // set screen quad vertex array
+    texQuad.Reset();
+    texQuad.Begin(GL_TRIANGLE_STRIP, 4, 1);
+    texQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
+    texQuad.MultiTexCoord2f(0, 0.0f, 0.0f);
+    texQuad.Vertex3f(x, y, 0.0f);
+    
+    texQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
+    texQuad.MultiTexCoord2f(0, 1.0f, 0.0f);
+    texQuad.Vertex3f(x + (float)tex_width, y, 0.0f);
+    
+    texQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
+    texQuad.MultiTexCoord2f(0, 0.0f, 1.0f);
+    texQuad.Vertex3f(x, y + (float)tex_height, 0.0f);
+    
+    texQuad.Color4f(0.0f, 1.0f, 0.0f, 1.0f);
+    texQuad.MultiTexCoord2f(0, 1.0f, 1.0f);
+    texQuad.Vertex3f(x + (float)tex_width, y + (float)tex_height, 0.0f);
+    texQuad.End();
+    
+}

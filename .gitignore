@@ -278,3 +278,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+bin/Debug/XcodeGlutDemo
+
+project/xcode/XcodeGlutDemo.xcodeproj/project.xcworkspace/xcuserdata/wupeifeng.xcuserdatad/UserInterfaceState.xcuserstate
